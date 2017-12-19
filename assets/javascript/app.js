@@ -9,9 +9,7 @@ let unansweredQuestions = 0;
 let questionsLeft = 0;
 let timer = 30;
 let clock;
-let selecterAnswer;
-let startScreen;
-let gameWords;
+
 
 // mouse click noise
 let mouseClick = new Audio('assets/audio/click.wav');
@@ -22,7 +20,7 @@ let triviaQuestions = ['English is not the only language spoken in the Firefly V
 
 let triviaOptions = [['Spanish', 'Mandarin', 'Japanese', 'Russian'], ['Yolanda', 'Bridget', 'Lenore', 'Saffron'], ['Canton Tea', 'Mudders Milk', 'Jaynes Java', 'Moon Shine'], ['His Bible', 'His Camera', 'His Identity Card', 'His Journal'], ['Inara', 'Simon', 'Jayne', 'Kaylee'], ['He had a beard', 'He was bald', 'He had a mustache', 'He had black hair'], ['Wash and Zoe', 'Mal and Jayne', 'Mal and Wash', 'Mal and Zoe'], ['Gold', 'Nutrition Bars', 'People', 'Cattle'], ['Shadow', 'Osiris', 'Ariel', 'Persephone'], ['Ivan Thrust', 'Pete Thrust', 'Crazy Pete', 'Crazy Ivan']];
 
-let triviaAnswers = ['Mandarin', 'Lenore', 'Mudders Milk', 'His Journal', 'Kaylee', 'He had a mustache', 'Mal and Wash', 'Cattle', 'Shadow', 'Crazy Ivan'];
+let triviaAnswers = ['Mandarin', 'Lenore', 'Mudders Milk', 'His Bible', 'Kaylee', 'He had a mustache', 'Mal and Wash', 'Cattle', 'Shadow', 'Crazy Ivan'];
 
 let answerImages = ["<img class='center-block img-right' src='assets/images/answer1.png'>", "<img class='center-block img-right' src='assets/images/answer2.jpg'>", "<img class='center-block img-right' src='assets/images/answer3.jpg'>", "<img class='center-block img-right' src='assets/images/answer4.jpg'>", "<img class='center-block img-right' src='assets/images/answer5.jpg'>", "<img class='center-block img-right' src='assets/images/answer6.jpg'>", "<img class='center-block img-right' src='assets/images/answer7.png'>", "<img class='center-block img-right' src='assets/images/answer8.jpg'>", "<img class='center-block img-right' src='assets/images/answer9.jpg'>", "<img class='center-block img-right' src='assets/images/answer10.jpeg'>"]
 
@@ -31,7 +29,7 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 
 	// starting screen function with button
 	function openingScreen() {
-		startScreen = '<button id="startButton" type="button" class="btn btn-secondary btn-lg btn-block">Start the Quiz!</button>';
+		let startScreen = "<button id='startButton' type='button' class='btn btn-dark'>Start the Quiz!</button>";
 		$('#gameArea').html(startScreen);
 	};
 
@@ -42,12 +40,12 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 
 	// adding questions into the html
 	function gameHTML() {
-		gameWords = "<p id='time-remaining' class='text-center'>Time Remaining: <span class='timer'>30</span> </p> <p class='text-center'>" +triviaQuestions[questionsLeft] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][0] + "</p><p class='answer'>" + triviaOptions[questionsLeft][1] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][2] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][3] + "</p>";
+		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>30</span> </p> <p>" +triviaQuestions[questionsLeft] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][0] + "</p><p class='answer'>" + triviaOptions[questionsLeft][1] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][2] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][3] + "</p>";
 		$("#gameArea").html(gameWords);
 	};
 
 	
-	// setting up the timer for each question
+	// setting up the timer for each question. the timer is already 30, if the timer = 0 you're out of time, if it's greater then 0 keep counting down
 	function questionTimer() {
 		clock = setInterval(thirtySeconds, 1000);
 		function thirtySeconds() {
@@ -60,7 +58,7 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 			}
 			$(".timer").html(timer)
 		}
-	}
+	};
 
 	
 	// click event to start the game
@@ -69,34 +67,36 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 		gameHTML();
 		questionTimer();
 		mouseClick.play();
-	})
+	});
 
 
-
+	// functions for when correct, wrong, or unanswered. Inset html, add appropiate numbers, and go to the next question
 	function correctAnswer() {
-		gameWords = "<p id='time-remaining' class='text-center'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p class='text-center'>Correct! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
-		$("gameArea").html(gameWords);
+		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Correct! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
+		$("#gameArea").html(gameWords);
 		userCorrect++;
-		setTimeout(5000);
-	}
+		setTimeout(nextQuestion, 5000);
+	};
 
 	function wrongAnswer() {
-		gameWords = "<p id='time-remaining' class='text-center'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p class='text-center'>Nope! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
-		$("gameArea").html(gameWords);
+		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Nope! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
+		$("#gameArea").html(gameWords);
 		userWrong++;
-		setTimeout(5000);
-	}
+		setTimeout(nextQuestion, 5000);
+	};
 
 	function outOfTime() {
-		gameWords = "<p id='time-remaining' class='text-center'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p class='text-center'>Times up! The answer was: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
-		$("gameArea").html(gameWords);
+		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Times up! The answer was: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
+		$("#gameArea").html(gameWords);
 		unansweredQuestions++;
-		setTimeout(5000);
-	}
+		setTimeout(nextQuestion, 5000);
+	};
 
+	
 
+	// click events to determine if the answer is correct or not
 	$("body").on("click", ".answer", function(e) {
-		selectedAnswer = $(this).text();
+		let selectedAnswer = $(this).text();
 		console.log(this);
 
 		if ( selectedAnswer === triviaAnswers[questionsLeft]) {
@@ -104,47 +104,58 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 			clearInterval(clock);
 			console.log(triviaAnswers[questionsLeft]);
 			console.log("correct!");
+			mouseClick.play();
 		} else {
 			wrongAnswer();
 			clearInterval(clock);
 			console.log(triviaAnswers[questionsLeft]);
 			console.log("nope");
+			mouseClick.play();
 		}
-	})
+	});
+
+
+	// if there are less then 10 questions left, go to the next question and reset the timer, else end the game
+	function nextQuestion() {
+		if (questionsLeft < 9) {
+			questionsLeft++;
+			gameHTML();
+			questionTimer();
+			timer = 30;
+		} else {
+			gameOver();
+		}
+	};
 
 
 
 
+	// game over function
+	function gameOver() {
+		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p>Game Over! Your results: " + "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p>Wrong Answers: " + userWrong + "</p>" + "<p>Unanswered: " + unansweredQuestions + "</p>" + "<button id='resetButton' type='button' class='btn btn-secondary btn-lg'>Take the quiz again!</button>";
+		$("#gameArea").html(gameWords);
+	};
 
 
+	
 
+	// reset function for the button with the click event
+	function reset() {
+		userCorrect = 0;
+		userWrong = 0;
+		unansweredQuestions = 0;
+		questionsLeft = 0;
+		timer = 30;
+		gameHTML();
+		questionTimer();
+	};
 
+	$('body').on("click", "#resetButton", function(e) {
+		reset();
+		mouseClick.play();
+	});
 
 
 
 // closing tag for document ready
 }); 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
