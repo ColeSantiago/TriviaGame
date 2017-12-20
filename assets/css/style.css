@@ -1,0 +1,97 @@
+* {
+	box-sizing: border-box;
+	position: relative;
+	
+	}
+
+body {
+  min-height: 100%;
+  min-width: 1024px;
+  width: 100%;
+  height: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin:20px;
+  background-repeat: no-repeat;
+
+}
+
+.mainArea {
+  background-color: black;
+  color: white;
+  max-width: 600px;
+  text-align: center;
+  border-radius: 15px;
+  opacity: 0.9;
+  font-family: 'Exo 2', sans-serif;
+  padding: 40px;
+  font-size: 20px;
+  top: 128px;
+  left: 152px;
+
+}
+
+
+
+img {
+  max-width: 400px;
+  margin: 20px;
+
+}
+
+h1 {
+  font-family: 'La Belle Aurore', cursive;
+  margin-bottom:50px;
+  font-size: 60px;
+
+
+}
+
+
+#time-remaining {
+  margin: 20px;
+  font-size: 30px;
+
+
+}
+
+.answer {
+  margin-top: 20px;  
+
+}
+
+.answer:hover {
+  background-color: orange;
+  cursor: pointer;
+  padding: 10px;
+}
+
+#resetButton {
+
+
+}
+
+.game-over {
+
+
+}
+
+.correct {
+
+
+}
+
+.wrong {
+
+
+}
+
+.unanswered {
+
+  
+}
+
+
+
+
