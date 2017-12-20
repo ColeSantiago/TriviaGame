@@ -11,9 +11,13 @@ let timer = 30;
 let clock;
 
 
-// mouse sounds
+// audio files
 let mouseClick = new Audio('assets/audio/click.wav');
+mouseClick.volume = 0.2;
 let mouseHover = new Audio('assets/audio/hover.mp3');
+
+let warningSound = new Audio('assets/audio/warning.wav')
+warningSound.volume = 0.2;
 
 
 // all trivia questions, answers, and images
@@ -39,16 +43,16 @@ let triviaOptions = [['Spanish', 'Mandarin', 'Japanese', 'Russian'],
 
 let triviaAnswers = ['Mandarin', 'Lenore', 'Mudders Milk', 'His Bible', 'Kaylee', 'He had a mustache', 'Mal and Wash', 'Cattle', 'Shadow', 'Crazy Ivan'];
 
-let answerImages = ["<img class='center-block img-right' src='assets/images/answer1.png'>", 
-					"<img class='center-block img-right' src='assets/images/answer2.jpg'>", 
-					"<img class='center-block img-right' src='assets/images/answer3.jpg'>", 
-					"<img class='center-block img-right' src='assets/images/answer4.jpg'>", 
-					"<img class='center-block img-right' src='assets/images/answer5.jpg'>", 
-					"<img class='center-block img-right' src='assets/images/answer6.jpg'>", 
-					"<img class='center-block img-right' src='assets/images/answer7.png'>", 
-					"<img class='center-block img-right' src='assets/images/answer8.jpg'>", 
-					"<img class='center-block img-right' src='assets/images/answer9.jpg'>", 
-					"<img class='center-block img-right' src='assets/images/answer10.jpeg'>"]
+let answerImages = ["<img src='assets/images/answer1.png'>", 
+					"<img src='assets/images/answer2.jpg'>", 
+					"<img src='assets/images/answer3.jpg'>", 
+					"<img src='assets/images/answer4.jpg'>", 
+					"<img src='assets/images/answer5.jpg'>", 
+					"<img src='assets/images/answer6.jpg'>", 
+					"<img src='assets/images/answer7.png'>", 
+					"<img src='assets/images/answer8.jpg'>", 
+					"<img src='assets/images/answer9.jpg'>", 
+					"<img src='assets/images/answer10.jpeg'>"]
 
 
 	
@@ -82,8 +86,13 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 			if (timer > 0) {
 				timer--;
 			}
+			if (timer === 3) {
+			warningSound.play();
+		}
 			$(".timer").html(timer)
 		}
+
+		
 	};
 
 	
@@ -114,21 +123,21 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Correct! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		userCorrect++;
-		setTimeout(nextQuestion, 1000);
+		setTimeout(nextQuestion, 5000);
 	};
 
 	function wrongAnswer() {
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Nope! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		userWrong++;
-		setTimeout(nextQuestion, 1000);
+		setTimeout(nextQuestion, 5000);
 	};
 
 	function outOfTime() {
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Times up! The answer was: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		unansweredQuestions++;
-		setTimeout(nextQuestion, 1000);
+		setTimeout(nextQuestion, 5000);
 	};
 
 	
@@ -176,7 +185,7 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 
 	// game over function
 	function gameOver() {
-		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p class='game-over'>Game Over! Your results: " + "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong + "</p>" + "<p class='unanswered'>Unanswered: " + unansweredQuestions + "</p>" + "<p id='resetButton'>Take the quiz again!</p>";
+		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p class='game-over'>Game Over! Your results: " + "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong + "</p>" + "<p class='unanswered'>Unanswered: " + unansweredQuestions + "<img src='assets/images/win.gif'>" + "</p>" + "<p id='resetButton'>Take the quiz again!</p>";
 		$("#gameArea").html(gameWords);
 	};
 
@@ -211,6 +220,8 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 		$("#resetButton").css("cursor", " ");
 		
 	})
+
+
 
 	
 
