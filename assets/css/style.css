@@ -67,29 +67,33 @@ h1 {
   padding: 10px;
 }
 
-#resetButton {
-
-
-}
 
 .game-over {
-
+  margin: 10px;
 
 }
 
 .correct {
+  margin: 10px;
 
 
 }
 
 .wrong {
+  margin: 10px;
 
 
 }
 
 .unanswered {
+  margin: 10px;
 
-  
+
+}
+
+#resetButton {
+  background-color: orange;
+  padding: 10px;
 }
 
 

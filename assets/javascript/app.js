@@ -11,8 +11,9 @@ let timer = 30;
 let clock;
 
 
-// mouse click noise
+// mouse sounds
 let mouseClick = new Audio('assets/audio/click.wav');
+let mouseHover = new Audio('assets/audio/hover.mp3');
 
 
 // all trivia questions, answers, and images
@@ -54,7 +55,7 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 
 	// starting screen function with button
 	function openingScreen() {
-		let startScreen = "<button id='startButton' type='button' class='btn btn-dark'>Start the Quiz!</button>";
+		let startScreen = "<p id='startButton' style='background-color: orange; padding: 10px;'>Start the Quiz!</p>";
 		$('#gameArea').html(startScreen);
 	};
 
@@ -94,27 +95,40 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 		mouseClick.play();
 	});
 
+	$("#startButton").mouseenter(function() {
+		$("#startButton").css("opacity", "0.9");
+		$("#startButton").css("cursor", "pointer");
+		mouseHover.play();
+
+	})
+
+	$("#startButton").mouseleave(function() {
+		$("#startButton").css("opacity", "1");
+		$("#startButton").css("cursor", " ");
+		
+	})
+
 
 	// functions for when correct, wrong, or unanswered. Inset html, add appropiate numbers, and go to the next question
 	function correctAnswer() {
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Correct! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		userCorrect++;
-		setTimeout(nextQuestion, 5000);
+		setTimeout(nextQuestion, 1000);
 	};
 
 	function wrongAnswer() {
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Nope! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		userWrong++;
-		setTimeout(nextQuestion, 5000);
+		setTimeout(nextQuestion, 1000);
 	};
 
 	function outOfTime() {
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Times up! The answer was: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		unansweredQuestions++;
-		setTimeout(nextQuestion, 5000);
+		setTimeout(nextQuestion, 1000);
 	};
 
 	
@@ -139,6 +153,11 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 		}
 	});
 
+	$("body").on("mouseenter", ".answer", function() {
+		mouseHover.play();
+
+	})
+
 
 	// if there are less then 10 questions left, go to the next question and reset the timer, else end the game
 	function nextQuestion() {
@@ -157,7 +176,7 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 
 	// game over function
 	function gameOver() {
-		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p class='game-over'>Game Over! Your results: " + "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong + "</p>" + "<p class='unanswered'>Unanswered: " + unansweredQuestions + "</p>" + "<button id='resetButton' type='button' class='btn btn-secondary btn-lg'>Take the quiz again!</button>";
+		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p class='game-over'>Game Over! Your results: " + "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong + "</p>" + "<p class='unanswered'>Unanswered: " + unansweredQuestions + "</p>" + "<p id='resetButton'>Take the quiz again!</p>";
 		$("#gameArea").html(gameWords);
 	};
 
@@ -179,6 +198,21 @@ let answerImages = ["<img class='center-block img-right' src='assets/images/answ
 		reset();
 		mouseClick.play();
 	});
+
+	$("body").on("mouseenter", "#resetButton", function() {
+		$("#resetButton").css("opacity", "0.9");
+		$("#resetButton").css("cursor", "pointer");
+		mouseHover.play();
+
+	})
+
+	$("body").on("mouseleave", "#resetButton", function() {
+		$("#resetButton").css("opacity", "1");
+		$("#resetButton").css("cursor", " ");
+		
+	})
+
+	
 
 
 
