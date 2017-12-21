@@ -123,21 +123,21 @@ let answerImages = ["<img src='assets/images/answer1.png'>",
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Correct! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		userCorrect++;
-		setTimeout(nextQuestion, 1000);
+		setTimeout(nextQuestion, 5000);
 	};
 
 	function wrongAnswer() {
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Nope! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		userWrong++;
-		setTimeout(nextQuestion, 1000);
+		setTimeout(nextQuestion, 5000);
 	};
 
 	function outOfTime() {
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Times up! The answer was: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		unansweredQuestions++;
-		setTimeout(nextQuestion, 1000);
+		setTimeout(nextQuestion, 5000);
 	};
 
 	
