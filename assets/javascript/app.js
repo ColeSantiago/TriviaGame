@@ -123,21 +123,21 @@ let answerImages = ["<img src='assets/images/answer1.png'>",
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Correct! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		userCorrect++;
-		setTimeout(nextQuestion, 5000);
+		setTimeout(nextQuestion, 1000);
 	};
 
 	function wrongAnswer() {
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Nope! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		userWrong++;
-		setTimeout(nextQuestion, 5000);
+		setTimeout(nextQuestion, 1000);
 	};
 
 	function outOfTime() {
 		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Times up! The answer was: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
 		$("#gameArea").html(gameWords);
 		unansweredQuestions++;
-		setTimeout(nextQuestion, 5000);
+		setTimeout(nextQuestion, 1000);
 	};
 
 	
@@ -186,7 +186,14 @@ let answerImages = ["<img src='assets/images/answer1.png'>",
 	// game over function
 	function gameOver() {
 
-		if (userCorrect >= 6) {
+		if (userCorrect === 10) {
+		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p class='game-over'>Game Over! You have done the impossible, and that makes you mighty! Your results: " + "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong + "</p>" + "<p class='unanswered'>Unanswered: " + unansweredQuestions + "<img src='assets/images/perfect-score.gif'>" + "</p>" + "<p id='resetButton'>Take the quiz again!</p>";
+		$("#gameArea").html(gameWords);
+
+		}
+
+
+		else if (userCorrect >= 6) {
 			let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p class='game-over'>Game Over! No power in the Verse can stop you! Your results: " + "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong + "</p>" + "<p class='unanswered'>Unanswered: " + unansweredQuestions + "<img src='assets/images/win.gif'>" + "</p>" + "<p id='resetButton'>Take the quiz again!</p>";
 			$("#gameArea").html(gameWords);
 		}
