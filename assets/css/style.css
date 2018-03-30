@@ -1,7 +1,6 @@
 * {
 	box-sizing: border-box;
 	position: relative;
-	
 	}
 
 body {
@@ -14,7 +13,6 @@ body {
   left: 0;
   margin:20px;
   background-repeat: no-repeat;
-
 }
 
 .mainArea {
@@ -29,36 +27,26 @@ body {
   font-size: 20px;
   top: 58px;
   left: 152px;
-
 }
-
-
 
 img {
   max-width: 400px;
   margin: 20px;
-
 }
 
 h1 {
   font-family: 'La Belle Aurore', cursive;
   margin-bottom:50px;
   font-size: 60px;
-
-
 }
-
 
 #time-remaining {
   margin: 20px;
   font-size: 30px;
-
-
 }
 
 .answer {
   margin-top: 20px;  
-
 }
 
 .answer:hover {
@@ -67,7 +55,6 @@ h1 {
   padding: 10px;
 }
 
-
 .game-over {
   margin: 10px;
 
@@ -75,27 +62,17 @@ h1 {
 
 .correct {
   margin: 10px;
-
-
 }
 
 .wrong {
   margin: 10px;
-
-
 }
 
 .unanswered {
   margin: 10px;
-
-
 }
 
 #resetButton {
   background-color: orange;
   padding: 10px;
 }
-
-
-
-

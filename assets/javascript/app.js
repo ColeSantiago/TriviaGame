@@ -1,7 +1,4 @@
 $(document).ready(function() {
-
-
-
 // global variables
 let userCorrect = 0;
 let userWrong = 0;
@@ -9,16 +6,12 @@ let unansweredQuestions = 0;
 let questionsLeft = 0;
 let timer = 30;
 let clock;
-
-
 // audio files
 let mouseClick = new Audio('assets/audio/click.wav');
 mouseClick.volume = 0.2;
 let mouseHover = new Audio('assets/audio/hover.mp3');
-
-let warningSound = new Audio('assets/audio/warning.wav')
+let warningSound = new Audio('assets/audio/warning.wav');
 warningSound.volume = 0.2;
-
 
 // all trivia questions, answers, and images
 let triviaQuestions = ['English is not the only language spoken in the Firefly Verse. Terms from what other language are frequently used?', 
@@ -52,196 +45,170 @@ let answerImages = ["<img src='assets/images/answer1.png'>",
 					"<img src='assets/images/answer7.png'>", 
 					"<img src='assets/images/answer8.jpg'>", 
 					"<img src='assets/images/answer9.jpg'>", 
-					"<img src='assets/images/answer10.jpeg'>"]
+					"<img src='assets/images/answer10.jpeg'>"];
 
+// starting screen function with button
+function openingScreen() {
+	let startScreen = "<p id='startButton' style='background-color: orange; padding: 10px;'>Start the Quiz!</p>";
+	$('#gameArea').html(startScreen);
+};
 
-	
+openingScreen();
 
-	// starting screen function with button
-	function openingScreen() {
-		let startScreen = "<p id='startButton' style='background-color: orange; padding: 10px;'>Start the Quiz!</p>";
-		$('#gameArea').html(startScreen);
-	};
+// adding questions into the html
+function gameHTML() {
+	let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>30</span> </p> <p>" +triviaQuestions[questionsLeft] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][0] + "</p><p class='answer'>" + triviaOptions[questionsLeft][1] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][2] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][3] + "</p>";
+	$("#gameArea").html(gameWords);
+};
 
-
-	openingScreen();
-
-
-
-	// adding questions into the html
-	function gameHTML() {
-		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>30</span> </p> <p>" +triviaQuestions[questionsLeft] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][0] + "</p><p class='answer'>" + triviaOptions[questionsLeft][1] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][2] + "</p> <p class='answer'>" + triviaOptions[questionsLeft][3] + "</p>";
-		$("#gameArea").html(gameWords);
-	};
-
-	
-	// setting up the timer for each question. the timer is already 30, if the timer = 0 you're out of time, if it's greater then 0 keep counting down
-	function questionTimer() {
-		clock = setInterval(thirtySeconds, 1000);
-		function thirtySeconds() {
-			if (timer === 0) {
-				clearInterval(clock);
-				outOfTime();
-			}
-			if (timer > 0) {
-				timer--;
-			}
-			if (timer === 3) {
+// setting up the timer for each question. the timer is already 30, if the timer = 0 you're out of time, if it's greater then 0 keep counting down
+function questionTimer() {
+	clock = setInterval(thirtySeconds, 1000);
+	function thirtySeconds() {
+		if (timer === 0) {
+			clearInterval(clock);
+			outOfTime();
+		}
+		if (timer > 0) {
+			timer--;
+		}
+		if (timer === 3) {
 			warningSound.play();
 		}
-			$(".timer").html(timer)
-		}
-
-		
+		$(".timer").html(timer)
+		}		
 	};
-
 	
-	// click event to start the game
+// click event to start the game
+$("#startButton").on("click", function(e) {
+	gameHTML();
+	questionTimer();
+	mouseClick.play();
+});
 
-	$("#startButton").on("click", function(e) {
+$("#startButton").mouseenter(function() {
+	$("#startButton").css("opacity", "0.9");
+	$("#startButton").css("cursor", "pointer");
+	mouseHover.play();
+});
+
+$("#startButton").mouseleave(function() {
+	$("#startButton").css("opacity", "1");
+	$("#startButton").css("cursor", " ");	
+});
+
+// functions for when correct, wrong, or unanswered. Inset html, add appropiate numbers, and go to the next question
+function correctAnswer() {
+	let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + 
+	"</span> </p>" + "<p>Correct! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
+	$("#gameArea").html(gameWords);
+	userCorrect++;
+	setTimeout(nextQuestion, 5000);
+};
+
+function wrongAnswer() {
+	let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + 
+	"</span> </p>" + "<p>Nope! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
+	$("#gameArea").html(gameWords);
+	userWrong++;
+	setTimeout(nextQuestion, 5000);
+};
+
+function outOfTime() {
+	let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + 
+	"</span> </p>" + "<p>Times up! The answer was: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
+	$("#gameArea").html(gameWords);
+	unansweredQuestions++;
+	setTimeout(nextQuestion, 5000);
+};
+
+// click events to determine if the answer is correct or not
+$("body").on("click", ".answer", function(e) {
+	let selectedAnswer = $(this).text();
+	console.log(this);
+	if ( selectedAnswer === triviaAnswers[questionsLeft]) {
+		correctAnswer();
+		clearInterval(clock);
+		console.log(triviaAnswers[questionsLeft]);
+		console.log("correct!");
+		mouseClick.play();
+	} else {
+		wrongAnswer();
+		clearInterval(clock);
+		console.log(triviaAnswers[questionsLeft]);
+		console.log("nope");
+		mouseClick.play();
+	}
+});
+
+$("body").on("mouseenter", ".answer", function() {
+	mouseHover.play();
+});
+
+// if there are less then 10 questions left, go to the next question and reset the timer, else end the game
+function nextQuestion() {
+	if (questionsLeft < 9) {
+		questionsLeft++;
 		gameHTML();
 		questionTimer();
-		mouseClick.play();
-	});
-
-	$("#startButton").mouseenter(function() {
-		$("#startButton").css("opacity", "0.9");
-		$("#startButton").css("cursor", "pointer");
-		mouseHover.play();
-
-	})
-
-	$("#startButton").mouseleave(function() {
-		$("#startButton").css("opacity", "1");
-		$("#startButton").css("cursor", " ");
-		
-	})
-
-
-	// functions for when correct, wrong, or unanswered. Inset html, add appropiate numbers, and go to the next question
-	function correctAnswer() {
-		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Correct! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
-		$("#gameArea").html(gameWords);
-		userCorrect++;
-		setTimeout(nextQuestion, 5000);
-	};
-
-	function wrongAnswer() {
-		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Nope! The answer is: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
-		$("#gameArea").html(gameWords);
-		userWrong++;
-		setTimeout(nextQuestion, 5000);
-	};
-
-	function outOfTime() {
-		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span> </p>" + "<p>Times up! The answer was: " + triviaAnswers[questionsLeft] + "</p>" + answerImages[questionsLeft];
-		$("#gameArea").html(gameWords);
-		unansweredQuestions++;
-		setTimeout(nextQuestion, 5000);
-	};
-
-	
-
-	// click events to determine if the answer is correct or not
-	$("body").on("click", ".answer", function(e) {
-		let selectedAnswer = $(this).text();
-		console.log(this);
-
-		if ( selectedAnswer === triviaAnswers[questionsLeft]) {
-			correctAnswer();
-			clearInterval(clock);
-			console.log(triviaAnswers[questionsLeft]);
-			console.log("correct!");
-			mouseClick.play();
-		} else {
-			wrongAnswer();
-			clearInterval(clock);
-			console.log(triviaAnswers[questionsLeft]);
-			console.log("nope");
-			mouseClick.play();
-		}
-	});
-
-	$("body").on("mouseenter", ".answer", function() {
-		mouseHover.play();
-
-	})
-
-
-	// if there are less then 10 questions left, go to the next question and reset the timer, else end the game
-	function nextQuestion() {
-		if (questionsLeft < 9) {
-			questionsLeft++;
-			gameHTML();
-			questionTimer();
-			timer = 30;
-		} else {
-			gameOver();
-		}
-	};
-
-
-
-
-	// game over function
-	function gameOver() {
-
-		if (userCorrect === 10) {
-		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p class='game-over'>Game Over! You have done the impossible, and that makes you mighty! Your results: " + "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong + "</p>" + "<p class='unanswered'>Unanswered: " + unansweredQuestions + "<img src='assets/images/perfect-score.gif'>" + "</p>" + "<p id='resetButton'>Take the quiz again!</p>";
-		$("#gameArea").html(gameWords);
-
-		}
-
-
-		else if (userCorrect >= 6) {
-			let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p class='game-over'>Game Over! No power in the Verse can stop you! Your results: " + "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong + "</p>" + "<p class='unanswered'>Unanswered: " + unansweredQuestions + "<img src='assets/images/win.gif'>" + "</p>" + "<p id='resetButton'>Take the quiz again!</p>";
-			$("#gameArea").html(gameWords);
-		}
-
-		else {
-			let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p class='game-over'>Game Over! Curse your sudden but inevitable betrayal! Your results: " + "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong + "</p>" + "<p class='unanswered'>Unanswered: " + unansweredQuestions + "<img src='assets/images/lose.gif'>" + "</p>" + "<p id='resetButton'>Take the quiz again!</p>";
-			$("#gameArea").html(gameWords);
-
-		}
-	};
-
-
-	
-
-	// reset function for the button with the click event
-	function reset() {
-		userCorrect = 0;
-		userWrong = 0;
-		unansweredQuestions = 0;
-		questionsLeft = 0;
 		timer = 30;
-		gameHTML();
-		questionTimer();
-	};
+	} else {
+		gameOver();
+	}
+};
 
-	$('body').on("click", "#resetButton", function(e) {
-		reset();
-		mouseClick.play();
-	});
+// game over function. The end screen will depend on how may correct answers there were
+function gameOver() {
+	if (userCorrect === 10) {
+		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + 
+		"</span></p>" + "<p class='game-over'>Game Over! You have done the impossible, and that makes you mighty! Your results: " 
+		+ "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong 
+		+ "</p>" + "<p class='unanswered'>Unanswered: " + unansweredQuestions + "<img src='assets/images/perfect-score.gif'>" + "</p>" + 
+		"<p id='resetButton'>Take the quiz again!</p>";
+		$("#gameArea").html(gameWords);
+	} else if (userCorrect >= 6) {
+		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + 
+		"</span></p>" + "<p class='game-over'>Game Over! No power in the Verse can stop you! Your results: " + "</p>" 
+		+ "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong + "</p>" 
+		+ "<p class='unanswered'>Unanswered: " + unansweredQuestions + "<img src='assets/images/win.gif'>" + "</p>" + 
+		"<p id='resetButton'>Take the quiz again!</p>";
+		$("#gameArea").html(gameWords);
+	} else {
+		let gameWords = "<p id='time-remaining'>Time Remaining: <span class='timer'>" + timer + 
+		"</span></p>" + "<p class='game-over'>Game Over! Curse your sudden but inevitable betrayal! Your results: " 
+		+ "</p>" + "<p class='correct'>Correct Answers: " + userCorrect + "</p>" + "<p class='wrong'>Wrong Answers: " + userWrong 
+		+ "</p>" + "<p class='unanswered'>Unanswered: " + unansweredQuestions + "<img src='assets/images/lose.gif'>" + "</p>" + 
+		"<p id='resetButton'>Take the quiz again!</p>";
+		$("#gameArea").html(gameWords);
 
-	$("body").on("mouseenter", "#resetButton", function() {
-		$("#resetButton").css("opacity", "0.9");
-		$("#resetButton").css("cursor", "pointer");
-		mouseHover.play();
+	}
+};
 
-	})
+// reset function for the button with the click event
+function reset() {
+	userCorrect = 0;
+	userWrong = 0;
+	unansweredQuestions = 0;
+	questionsLeft = 0;
+	timer = 30;
+	gameHTML();
+	questionTimer();
+};
 
-	$("body").on("mouseleave", "#resetButton", function() {
-		$("#resetButton").css("opacity", "1");
-		$("#resetButton").css("cursor", " ");
-		
-	})
+$('body').on("click", "#resetButton", function(e) {
+	reset();
+	mouseClick.play();
+});
 
+$("body").on("mouseenter", "#resetButton", function() {
+	$("#resetButton").css("opacity", "0.9");
+	$("#resetButton").css("cursor", "pointer");
+	mouseHover.play();
+});
 
-
-	
-
-
-
+$("body").on("mouseleave", "#resetButton", function() {
+	$("#resetButton").css("opacity", "1");
+	$("#resetButton").css("cursor", " ");	
+});
 // closing tag for document ready
 }); 
